@@ -1,0 +1,69 @@
+.timesheet-section {
+  width: 90%;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.grid-container {
+  margin-top: 12rem;
+}
+
+.timesheet-input-table {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(7, 0.5fr);
+
+  border-bottom: 1px solid #333;
+  border-left: 1px solid #333;
+}
+
+.timesheet-input-table span {
+  border-top: 1px solid #333;
+  border-right: 1px solid #333;
+}
+
+.timesheet-input-table span input {
+  text-align: center;
+  font-size: 2.4rem;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+.timesheet-input-table span input:focus {
+  outline: none;
+}
+
+.timesheet-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
+}
+
+.timesheet-btn {
+  border: none;
+  background-color: #fff;
+  font-size: 4.4rem;
+}
+
+.timesheet-add-item-btn {
+  color: #4dabf7;
+}
+
+.timesheet-remove-item-btn {
+  color: #f08c00;
+}
+
+.timesheet-add-item-btn:active,
+.timesheet-remove-item-btn:active {
+  color: #ddd;
+}
+
+/* 
+- FONT SIZE SYSTEM (px)
+  10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+
+   --- 05 WHITESPACE:
+  - SPACING SYSTEM (px)
+      2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+*/

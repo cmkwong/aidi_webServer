@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../css/general.css" />
+    <link rel="stylesheet" href="../css/overview.css" />
+    <link rel="stylesheet" href="../css/report.css" />
+    <title>Report</title>
+  </head>
+  <body>
+    <section class="nav-section">
+      <div class="info">
+        <div class="time">
+          <span>Time:</span>
+          <span id="time--text" class="time--text">-</span>
+        </div>
+        <div class="identity">
+          <p>
+            <span class="role">Grader</span>:
+            <span class="user-name">Chris Cheung</span>
+          </p>
+        </div>
+      </div>
+      <div class="menu">
+        <ul class="menu-list">
+          <li>
+            <a class="menu-list-item" href="#">Schedule</a>
+          </li>
+          <li>
+            <a class="menu-list-item" href="#">Report</a>
+          </li>
+          <li>
+            <a class="menu-list-item" href="#">Productivity</a>
+          </li>
+          <li>
+            <a class="menu-list-item" href="#">Timesheet</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="report-section">
+      <div class="report-grid">
+        <div class="date-time-input-bar">
+          <ul class="input-bar-items">
+            <li>
+              <label for="start-date">Start Date: </label>
+              <input class="start-date" id="start-date" type="date" lang="en" />
+            </li>
+            <li>
+              <label for="end-date">End Date: </label>
+              <input class="end-date" id="end-date" type="date" lang="en" />
+            </li>
+          </ul>
+        </div>
+        <div class="graph-container">
+          <canvas class="graph" id="myChart"></canvas>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script defer src="../js/graph.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+</html>
