@@ -1,0 +1,31 @@
+.project-status-section {
+  margin-top: 3rem;
+}
+
+.block {
+  margin: 0 auto;
+  width: 50%;
+}
+
+.project-status {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-status-table {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.project-status-table .row {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(6, 10rem);
+}
+
+.project-status-table .header {
+  margin-bottom: 2rem;
+}
