@@ -2,9 +2,18 @@ const mongoose = require("mongoose");
 
 const projectSchema = mongoose.Schema(
   {
-    name: String, // String instead of Number
-    location: String,
-    link: String,
+    name: {
+      type: String,
+      required: [true, "project name is required"],
+    }, // String instead of Number
+    location: {
+      type: String,
+      required: [true, "project locale is required"],
+    },
+    link: {
+      type: String,
+      required: [true, "project link is required"],
+    },
   },
   { collection: "projects" }
 );

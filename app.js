@@ -6,9 +6,14 @@ const compression = require("compression");
 const cookieParser = require("cookie-parser"); // getting the cookie from request
 const bodyParser = require("body-parser");
 
+// self class
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controller/errorController");
+
 // require routes
 const viewRouter = require("./routes/viewRoutes");
 const projectRouter = require("./routes/projectRoutes");
+const queryRouter = require("./routes/queryRoutes");
 
 const app = express();
 app.enable("trust proxy"); // Heroku acts as a proxy, #223 0451
@@ -37,23 +42,15 @@ app.use(compression());
 // ***************** ROUTES *****************//
 app.use("/", viewRouter); // middleware: root
 app.use("/api/v1/project", projectRouter);
+app.use("/api/v1/query", queryRouter);
 
 app.all("*", (req, res, next) => {
-  const err = new Error(`Cannot find ${req.originalUrl} on this server`);
-  err.status = "fail";
-  err.statusCode = 404;
-
-  next(err); // skip all other middleware except the error handle middleware
+  // const err = new Error(`Cannot find ${req.originalUrl} on this server`);
+  // err.status = "fail";
+  // err.statusCode = 404;
+  next(new AppError(`Cannot find ${req.originalUrl} on this server`), 404); // skip all other middleware except the error handle middleware
 });
 
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "error";
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  });
-});
+app.use(globalErrorHandler);
 
 module.exports = app;

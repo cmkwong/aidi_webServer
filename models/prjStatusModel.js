@@ -8,11 +8,11 @@ const prjStatusSchema = mongoose.Schema(
   {
     project_id: {
       type: String,
-      require: true,
+      required: [true, "project id is required"],
     },
     locale: {
       type: String,
-      require: true,
+      required: [true, "locale is required"],
     },
     status: {
       type: Map,
