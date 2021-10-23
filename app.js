@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(compression()); // compress all the text that send to client
 
 // ***************** ROUTES *****************//
-app.use("/", viewRouter); // middleware: root
+// app.use("/", viewRouter); // middleware: root
 app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/query", queryRouter);
 
