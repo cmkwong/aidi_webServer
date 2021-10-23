@@ -12,20 +12,6 @@ exports.answerInsertAllowed = (req, res, next) => {
     next(new AppError("No allowed to update answer", 404));
   }
 };
-exports.findQuery = catchAsync(async (req, res, next) => {
-  const filter = {
-    project_id: req.body.project_id,
-    locale: req.body.locale,
-    query_text: req.body.query_text,
-  };
-  // count the document based on fitler
-  // res.locals.count = await Query.countDocuments(filter);
-
-  // find the query
-  res.locals.query = await Query.findOne(filter);
-  // console.log(res.locals.query._id);
-  next();
-});
 
 exports.updateQuery = catchAsync(async (req, res, next) => {
   // if not existed, create new document and update
@@ -43,36 +29,18 @@ exports.updateQuery = catchAsync(async (req, res, next) => {
     query.project_id = req.body.project_id;
     query.locale = req.body.locale;
     query.results = req.body.results;
-    await query.save();
-    // otherwise, find the required document and update
+    await query.save(); // if has validation error, it will occur and return to next(err)
   }
-  res.locals.query = query;
-  // query.id return String; query._id return ObjectId
-  // need to await as it return promise
-  // res.locals.query_id = await query._id;
-  next();
-});
-
-exports.findAnswer = catchAsync(async (req, res, next) => {
-  const filter = {
-    grader: req.body.grader,
-    query_id: res.locals.query._id,
-  };
-  console.log(filter);
-  // count the document based on fitler
-  // const count = await Answer.countDocuments(filter);
-
-  // find the answer
-  res.locals.answer = await Answer.findOne(filter); // Type is Schema object that can be used to updated
+  res.locals.query = query; // for later maybe use this query._id
   next();
 });
 
 exports.updateAnswer = catchAsync(async (req, res, next) => {
   // if not existed, create new document and update
-  let answer = await factory.findAnswer(
+  let answer = await factory.findGraderAnswer(
     Answer,
-    req.body.grader,
-    res.locals.query._id
+    res.locals.query._id,
+    req.body.grader
   );
   if (!answer) {
     answer = new Answer();
@@ -80,12 +48,8 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
     answer.grader_ans = req.body.grader_ans;
     answer.query_id = res.locals.query._id;
     answer.time = Date.now();
-    // otherwise, find the required document and update
   } else {
-    // answer = await Answer.findOne(filter);
-    // answer.grader_ans = req.body.grader_ans;
-    // answer.time = Date.now();
-
+    // if answer existed, modified the answer and update the date
     answer.grader_ans = req.body.grader_ans;
     answer.time = Date.now();
   }
@@ -98,4 +62,28 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAnswer = catchAsync(async (req, res, next) => {});
+exports.getAnswer = catchAsync(async (req, res, next) => {
+  // find the query
+  let query = await factory.findQuery(
+    Query,
+    req.query.project_id,
+    req.query.locale,
+    req.query.query_text
+  );
+  if (!query) {
+    return next(new AppError("No such query found", 404));
+  }
+
+  // base on the query ID, find all of the answer
+  let answer = await factory.findAnswer(Answer, query._id); // answer is [object], cannot found return []
+  if (answer.length === 0) {
+    return next(new AppError("No such answer found", 404));
+  }
+  // console.log(global.payment);
+
+  // if successfully found the answers
+  res.status(200).json({
+    status: "answers found successfully",
+    data: answer,
+  });
+});

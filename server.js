@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
+// self module
+const User = require("./models/userModel");
+const Payment = require("./models/paymentModel");
+
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
   console.log("UNCAUGHT REJECTION, SHUTTING DOWN ...");
@@ -29,8 +33,33 @@ mongoose
   .catch((error) => console.log(error))
   .then(() => console.log("DB connected successfully"));
 
+// define global variable
+// User.find({}).then((data) => {
+//   global.users = data;
+// });
+// Payment.find({}).then((data) => {
+//   global.payment = data;
+// });
+
 // start the server
 const port = process.env.PORT; // listen port 3000, random assigned in heroku
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}`);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log(err.name, err.message);
+  console.log("UNHANDLED REJECTION, SHUTTING DOWN ...");
+  server.close(() => {
+    // give the server time to finish all the request
+    process.exit(1);
+  });
+});
+
+process.on("SIGTERM", () => {
+  // received from heroku that stopping signal, #224, 0150
+  console.log("SIGTERM RECEIVED. Shutting down gracefully.");
+  server.close(() => {
+    console.log("Processing terminated!");
+  });
 });

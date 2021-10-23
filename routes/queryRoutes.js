@@ -5,14 +5,14 @@ const router = express.Router({ mergeParams: true }); // what is mergeParams? ht
 
 // router.use(authController.protect);
 
-router.route("/").post(
-  // queryController.findQuery,
-  queryController.updateQuery,
-  queryController.answerInsertAllowed,
-  // queryController.findAnswer,
-  queryController.updateAnswer
-);
+router
+  .route("/")
+  .post(
+    queryController.updateQuery,
+    queryController.answerInsertAllowed,
+    queryController.updateAnswer
+  );
 
-router.route("/answer").get();
+router.route("/answer").get(queryController.getAnswer);
 
 module.exports = router;
