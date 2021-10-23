@@ -37,7 +37,7 @@ app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" })); // getting the user data from a form so updateUserData() (in viewsController) can be used, #194 0930
 app.use(cookieParser());
 
-app.use(compression());
+app.use(compression()); // compress all the text that send to client
 
 // ***************** ROUTES *****************//
 app.use("/", viewRouter); // middleware: root
