@@ -27,5 +27,5 @@ router
 
 router
   .route("/manyAnswerManyQueryId")
-  .get(queryController.getManyAnswerByManyQueryId);
+  .post(queryController.getManyAnswerByManyQueryId);
 module.exports = router;
