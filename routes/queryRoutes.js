@@ -11,8 +11,21 @@ router
     queryController.updateQuery,
     queryController.answerInsertAllowed,
     queryController.updateAnswer
+  )
+  .get(queryController.getQuries);
+
+router
+  .route("/manyAnswer")
+  .get(
+    queryController.getOneQueryId,
+    queryController.getManyAnswerByOneQueryId
   );
 
-router.route("/answer").get(queryController.getAnswer);
+router
+  .route("/oneAnswer")
+  .get(queryController.getOneQueryId, queryController.getOneAnswerByOneQueryId);
 
+router
+  .route("/manyAnswerManyQueryId")
+  .get(queryController.getManyAnswerByManyQueryId);
 module.exports = router;

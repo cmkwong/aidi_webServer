@@ -15,13 +15,14 @@ exports.answerInsertAllowed = (req, res, next) => {
 
 exports.updateQuery = catchAsync(async (req, res, next) => {
   // if not existed, create new document and update
-  let query = await factory.findQuery(
+  let query = await factory.findQueries(
+    // always return list
     Query,
     req.body.project_id,
     req.body.locale,
     req.body.query_text
   );
-  if (!query) {
+  if (query.length === 0) {
     query = new Query(); // define the empty dictionary here https://mongoosejs.com/docs/schematypes.html#maps
     query.searchDateLocation = req.body.searchDateLocation;
     query.query_text = req.body.query_text;
@@ -61,29 +62,86 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
     data: answer,
   });
 });
-
-exports.getAnswer = catchAsync(async (req, res, next) => {
+exports.getOneQueryId = catchAsync(async (req, res, next) => {
+  // expected only one query is found based on this three conditions
+  if (!req.query.project_id || !req.query.locale || !req.query.query_text) {
+    return next(new AppError("project_id/locale/query_text missed"));
+  }
   // find the query
-  let query = await factory.findQuery(
+  let queries = await factory.findQueries(
     Query,
     req.query.project_id,
     req.query.locale,
     req.query.query_text
   );
-  if (!query) {
+  if (queries.length === 0) {
     return next(new AppError("No such query found", 404));
   }
+  res.locals.query = queries[0];
+  next();
+});
 
+exports.getManyAnswerByOneQueryId = catchAsync(async (req, res, next) => {
   // base on the query ID, find all of the answer
-  let answer = await factory.findAnswer(Answer, query._id); // answer is [object], cannot found return []
-  if (answer.length === 0) {
+  let query_id = res.locals.query._id;
+  let answers = await factory.findManyAnswerByOneQueryId(
+    Answer,
+    query_id,
+    req.query.many
+  ); // answer is [object], cannot found return []
+  if (answers.length === 0) {
     return next(new AppError("No such answer found", 404));
   }
-  // console.log(global.payment);
-
   // if successfully found the answers
   res.status(200).json({
     status: "answers found successfully",
+    data: answers,
+  });
+});
+
+exports.getOneAnswerByOneQueryId = catchAsync(async (req, res, next) => {
+  // base on the query ID, find all of the answer
+  let query_id = res.locals.query._id;
+  let answer = await factory.findOneAnswerByOneQueryId(
+    Answer,
+    query_id,
+    req.query.many
+  ); // answer is object
+  if (answer.length === 0) {
+    return next(new AppError("No such answer found", 404));
+  }
+  // if successfully found the answers
+  res.status(200).json({
+    status: "answer found successfully",
     data: answer,
+  });
+});
+
+exports.getManyAnswerByManyQueryId = catchAsync(async (req, res, next) => {
+  let answers = await factory.findManyAnswerByManyQueryId(
+    Answer,
+    req.body.query_ids
+  );
+  // if successfully found the answers
+  res.status(200).json({
+    status: "answers found successfully",
+    data: answers,
+  });
+});
+
+exports.getQuries = catchAsync(async (req, res, next) => {
+  let queries = await factory.findQueries(
+    Query,
+    req.query.project_id,
+    req.query.locale,
+    req.query.query_text,
+    Number(req.query.max ? req.query.max : 50) // default maximum head 50 documents
+  );
+  if (queries.length === 0) {
+    return next(new AppError("No such query found", 404));
+  }
+  res.status(200).json({
+    status: "queries found successfully",
+    data: queries,
   });
 });

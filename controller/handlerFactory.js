@@ -1,12 +1,22 @@
 const catchAsync = require("../utils/catchAsync");
 
-exports.findQuery = async (QueryModel, project_id, locale, query_text) => {
+exports.findQueries = async (
+  QueryModel,
+  project_id,
+  locale,
+  query_text,
+  max = 50
+) => {
   const filter = {
     project_id,
     locale,
     query_text,
   };
-  let query = await QueryModel.findOne(filter);
+  // delete the undefined fields
+  Object.keys(filter).forEach((key) =>
+    filter[key] === undefined ? delete filter[key] : {}
+  );
+  let query = await QueryModel.find(filter).limit(max);
   return query; // always return Promise
 };
 
@@ -19,12 +29,31 @@ exports.findGraderAnswer = async (AnswerModel, query_id, grader) => {
   return answer; // always return Promise
 };
 
-exports.findAnswer = async (AnswerModel, query_id) => {
+exports.findManyAnswerByOneQueryId = async (AnswerModel, query_id) => {
   let filter = {
     query_id,
   };
-  let answer = await AnswerModel.find(filter); // return [object]
+  let answers;
+  answers = await AnswerModel.find(filter); // return [object]
+  return answers; // always return Promise
+};
+
+exports.findOneAnswerByOneQueryId = async (AnswerModel, query_id) => {
+  let filter = {
+    query_id,
+  };
+  let answer;
+  answer = await AnswerModel.findOne(filter); // return object
   return answer; // always return Promise
+};
+
+exports.findManyAnswerByManyQueryId = async (AnswerModel, query_ids) => {
+  let filter_arr = query_ids.map((id) => {
+    return { query_id: id };
+  });
+  let answers;
+  answers = await AnswerModel.find({ $or: filter_arr }); // return [object]
+  return answers; // always return Promise
 };
 
 exports.findUsers = async (UserModel, locale, role) => {
@@ -33,6 +62,7 @@ exports.findUsers = async (UserModel, locale, role) => {
     locale,
     role,
   };
+  // delete the undefined fields
   Object.keys(filter).forEach((key) =>
     filter[key] === undefined ? delete filter[key] : {}
   );
