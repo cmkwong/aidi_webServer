@@ -4,7 +4,11 @@ const paymentSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      expired: Date,
+      required: [true, "require the name"],
+    },
+    expired: {
+      type: String,
+      required: [true, "require the date"],
     },
   },
   { collection: "payment" }

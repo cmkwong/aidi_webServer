@@ -15,6 +15,8 @@ const viewRouter = require("./routes/viewRoutes");
 const projectRouter = require("./routes/projectRoutes");
 const queryRouter = require("./routes/queryRoutes");
 const userRouter = require("./routes/userRoutes");
+const authRouter = require("./routes/authRoutes");
+const systemRouter = require("./routes/systemRoutes");
 
 const app = express();
 app.enable("trust proxy"); // Heroku acts as a proxy, #223 0451
@@ -45,6 +47,8 @@ app.use(compression()); // compress all the text that send to client
 app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/query", queryRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/system", systemRouter);
 
 app.all("*", (req, res, next) => {
   // const err = new Error(`Cannot find ${req.originalUrl} on this server`);
