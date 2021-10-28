@@ -14,6 +14,7 @@ exports.answerInsertAllowed = (req, res, next) => {
 };
 
 exports.updateQuery = catchAsync(async (req, res, next) => {
+  console.log(req.body.grader);
   // if not existed, create new document and update
   let query = await factory.findOneQuery(
     // always return list
@@ -43,7 +44,6 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
     res.locals.query._id,
     req.body.grader
   );
-  console.log(req.body.grader);
   if (!answer) {
     answer = new Answer();
     answer.grader = req.body.grader;
