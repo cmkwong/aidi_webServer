@@ -16,7 +16,6 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.getExpiredDate = catchAsync(async (req, res, next) => {
-  //
   let filter = {
     name: req.query.grader,
   };
