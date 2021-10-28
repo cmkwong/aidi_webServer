@@ -15,24 +15,24 @@ exports.answerInsertAllowed = (req, res, next) => {
 
 exports.updateQuery = catchAsync(async (req, res, next) => {
   // if not existed, create new document and update
-  let query = await factory.findQueries(
+  let queries = await factory.findQueries(
     // always return list
     Query,
     req.body.project_id,
     req.body.locale,
     req.body.query_text
   );
-  if (query.length === 0) {
-    query = new Query(); // define the empty dictionary here https://mongoosejs.com/docs/schematypes.html#maps
-    query.searchDateLocation = req.body.searchDateLocation;
-    query.query_text = req.body.query_text;
-    query.query_link = req.body.query_link;
-    query.project_id = req.body.project_id;
-    query.locale = req.body.locale;
-    query.results = req.body.results;
-    await query.save(); // if has validation error, it will occur and return to next(err)
+  if (queries.length === 0) {
+    queries = new Query(); // define the empty dictionary here https://mongoosejs.com/docs/schematypes.html#maps
+    queries.searchDateLocation = req.body.searchDateLocation;
+    queries.query_text = req.body.query_text;
+    queries.query_link = req.body.query_link;
+    queries.project_id = req.body.project_id;
+    queries.locale = req.body.locale;
+    queries.results = req.body.results;
+    await queries.save(); // if has validation error, it will occur and return to next(err)
   }
-  res.locals.query = query; // for later maybe use this query._id
+  res.locals.query = queries[0]; // for later maybe use this query._id
   next();
 });
 
@@ -43,6 +43,7 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
     res.locals.query._id,
     req.body.grader
   );
+  console.log(req.body.grader);
   if (!answer) {
     answer = new Answer();
     answer.grader = req.body.grader;
