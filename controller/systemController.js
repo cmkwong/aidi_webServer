@@ -10,30 +10,40 @@ exports.getVersion = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getHealthStatus = catchAsync(async (req, res, next) => {
+exports.getClientsHealthStatus = catchAsync(async (req, res, next) => {
   // checking version
-  let admin_version;
-  const versionData = await Version.findOne({});
-  if (req.body.type === "clients") {
-    admin_version = versionData.clients;
-  } else {
-    admin_version = versionData.checker;
-  }
-  if (admin_version !== req.body.user_version) {
-    return next(new AppError("Version is not updated"), 500);
+  const cur_version = await Version.findOne({});
+
+  if (cur_version.clients !== req.body.user_version) {
+    return next(new AppError("Version is not updated", 409));
   }
 
   // checking payment
   let hr_left = -1;
-  if (req.body.grader) {
-    let payment = await Payment.findOne({ name: req.body.grader });
-    if (payment) {
-      console.log(payment.expired);
-      hr_left =
-        (Date.parse(payment.expired) - new Date().getTime()) / 60 / 60 / 1000;
-    }
+  let payment = await Payment.findOne({ name: req.body.grader });
+  if (payment) {
+    hr_left =
+      (Date.parse(payment.expired) -
+        8 * 60 * 60 * 1000 - // substract 8 hours because it is hongkong time
+        new Date().getTime()) / // always return UTC time
+      60 /
+      60 /
+      1000;
   }
   res.status(200).json({
     data: hr_left,
+  });
+});
+
+exports.getCheckersHealthStatus = catchAsync(async (req, res, next) => {
+  // checking version
+  const cur_version = await Version.findOne({});
+
+  if (cur_version.checker !== req.body.user_version) {
+    return next(new AppError("Version is not updated", 409));
+  }
+
+  res.status(200).json({
+    message: "Good",
   });
 });

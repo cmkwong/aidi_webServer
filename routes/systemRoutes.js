@@ -6,6 +6,11 @@ const router = express.Router({ mergeParams: true }); // what is mergeParams? ht
 // router.use(authController.protect);
 
 router.route("/version").get(systemController.getVersion);
-router.route("/healthStatus").post(systemController.getHealthStatus);
+router
+  .route("/clientsHealthStatus")
+  .post(systemController.getClientsHealthStatus);
 
+router
+  .route("/checkersHealthStatus")
+  .post(systemController.getCheckersHealthStatus);
 module.exports = router;
