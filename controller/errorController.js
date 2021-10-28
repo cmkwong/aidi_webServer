@@ -7,4 +7,5 @@ module.exports = (err, req, res, next) => {
     message: err.message,
     stackTrace: err.stack,
   });
+  console.log(err.stack);
 };
