@@ -1,5 +1,16 @@
 const catchAsync = require("../utils/catchAsync");
 
+exports.findOneQuery = async (QueryModel, project_id, locale, query_text) => {
+  const filter = {
+    project_id,
+    locale,
+    query_text,
+  };
+
+  let query = await QueryModel.findOne(filter);
+  return query; // always return Promise
+};
+
 exports.findQueries = async (
   QueryModel,
   project_id,
