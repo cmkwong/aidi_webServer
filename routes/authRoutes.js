@@ -6,4 +6,6 @@ const router = express.Router({ mergeParams: true }); // what is mergeParams? ht
 // router.use(authController.protect);
 
 router.route("/token").post(authController.getToken);
+router.route("/user/login").post(authController.login);
+router.route("/user/logout").post(authController.login); // not completed
 module.exports = router;

@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 
 // self module
 const User = require("./models/userModel");
-const Payment = require("./models/paymentModel");
 
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
@@ -34,12 +33,10 @@ mongoose
   .then(() => console.log("DB connected successfully"));
 
 // define global variable
-// User.find({}).then((data) => {
-//   global.users = data;
-// });
-// Payment.find({}).then((data) => {
-//   global.payment = data;
-// });
+User.find({}).then((data) => {
+  global.users = data;
+});
+global.pe_counts = {};
 
 // start the server
 const port = process.env.PORT; // listen port 3000, random assigned in heroku

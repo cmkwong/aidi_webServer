@@ -33,9 +33,21 @@ const userSchema = new mongoose.Schema(
       enum: ["hk", "jp"],
       default: "hk",
     },
+    webPassword: {
+      type: String,
+      select: false,
+    },
   },
   { collection: "graders" }
 );
+
+// instance method
+userSchema.methods.correctPassword = function (
+  candidatePassword,
+  userPassword
+) {
+  return candidatePassword === userPassword; // no bcript here
+};
 
 const User = mongoose.model("User", userSchema);
 

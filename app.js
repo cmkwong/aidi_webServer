@@ -21,7 +21,7 @@ const systemRouter = require("./routes/systemRoutes");
 const app = express();
 app.enable("trust proxy"); // Heroku acts as a proxy, #223 0451
 
-// app.set("view engine", "pug"); // set the pug for filling the template
+app.set("view engine", "pug"); // set the pug for filling the template
 app.set("views", path.join(__dirname, "views")); // C:\Users\Chris\projects\Udemy_Learning\200922_NodeJS-Express-MongoDB-Bootcamp-2020\4-natours
 
 //--------- Middleware stack ---------//
@@ -33,7 +33,7 @@ app.options("*", cors()); // #225
 app.use(express.static(path.join(__dirname, "public")));
 
 // Set Security HTTP headers
-app.use(helmet());
+// app.use(helmet());
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10kb" }));
@@ -43,7 +43,7 @@ app.use(cookieParser());
 app.use(compression()); // compress all the text that send to client
 
 // ***************** ROUTES *****************//
-// app.use("/", viewRouter); // middleware: root
+app.use("/", viewRouter); // middleware: root
 app.use("/api/v1/project", projectRouter);
 app.use("/api/v1/query", queryRouter);
 app.use("/api/v1/user", userRouter);
