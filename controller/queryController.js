@@ -21,7 +21,7 @@ exports.updateQuery = catchAsync(async (req, res, next) => {
     Query,
     req.body.project_id,
     req.body.locale,
-    req.body.query_text
+    req.body.query_code
   );
   if (!query) {
     query = new Query(); // define the empty dictionary here https://mongoosejs.com/docs/schematypes.html#maps
@@ -30,6 +30,7 @@ exports.updateQuery = catchAsync(async (req, res, next) => {
     query.query_link = req.body.query_link;
     query.project_id = req.body.project_id;
     query.locale = req.body.locale;
+    query.query_code = req.body.query_code;
     query.results = req.body.results;
     await query.save(); // if has validation error, it will occur and return to next(err)
   }

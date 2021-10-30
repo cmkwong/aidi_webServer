@@ -3,10 +3,7 @@ const mongoose = require("mongoose");
 const querySchema = mongoose.Schema(
   {
     searchDateLocation: String,
-    query_text: {
-      type: String,
-      required: [true, "query text is required"],
-    },
+    query_text: String,
     query_link: {
       type: String,
       required: [true, "query link is required"],
@@ -18,6 +15,10 @@ const querySchema = mongoose.Schema(
     locale: {
       type: String,
       required: [true, "project locale is required"],
+    },
+    query_code: {
+      type: String,
+      required: [true, "query code is required"],
     },
     results: Array,
   },
