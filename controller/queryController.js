@@ -66,20 +66,25 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
 });
 exports.getOneQueryId = catchAsync(async (req, res, next) => {
   // expected only one query is found based on this three conditions
-  if (!req.query.project_id || !req.query.locale || !req.query.query_text) {
-    return next(new AppError("project_id/locale/query_text missed"));
+  if (!req.query.project_id || !req.query.locale || !req.query.query_code) {
+    return next(
+      new AppError(
+        `project_id=${!!req.query.project_id}, locale=${!!req.query
+          .locale}, query_code=${!!req.query.query_code}`
+      )
+    );
   }
   // find the query
-  let queries = await factory.findQueries(
+  let query = await factory.findOneQuery(
     Query,
     req.query.project_id,
     req.query.locale,
-    req.query.query_text
+    req.query.query_code
   );
-  if (queries.length === 0) {
+  if (!query) {
     return next(new AppError("No such query found", 404));
   }
-  res.locals.query = queries[0];
+  res.locals.query = query;
   next();
 });
 
@@ -109,7 +114,7 @@ exports.getOneAnswerByOneQueryId = catchAsync(async (req, res, next) => {
     query_id,
     req.query.many
   ); // answer is object
-  if (answer.length === 0) {
+  if (!answer) {
     return next(new AppError("No such answer found", 404));
   }
   // if successfully found the answers
@@ -136,7 +141,7 @@ exports.getQuries = catchAsync(async (req, res, next) => {
     Query,
     req.query.project_id,
     req.query.locale,
-    req.query.query_text,
+    req.query.query_code,
     Number(req.query.max ? req.query.max : 50) // default maximum head 50 documents
   );
   if (queries.length === 0) {

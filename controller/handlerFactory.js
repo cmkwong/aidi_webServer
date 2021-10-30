@@ -1,10 +1,10 @@
 const catchAsync = require("../utils/catchAsync");
 
-exports.findOneQuery = async (QueryModel, project_id, locale, query_text) => {
+exports.findOneQuery = async (QueryModel, project_id, locale, query_code) => {
   const filter = {
     project_id,
     locale,
-    query_text,
+    query_code,
   };
 
   let query = await QueryModel.findOne(filter);
@@ -15,13 +15,13 @@ exports.findQueries = async (
   QueryModel,
   project_id,
   locale,
-  query_text,
+  query_code,
   max = 50
 ) => {
   const filter = {
     project_id,
     locale,
-    query_text,
+    query_code,
   };
   // delete the undefined fields
   Object.keys(filter).forEach((key) =>
