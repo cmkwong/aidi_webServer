@@ -20,14 +20,15 @@ exports.viewProjectStatus = catchAsync(async (req, res, next) => {
     };
     return project_data;
   });
-  const graders = JSON.parse(process.env.GRADERS).map((user) => {
-    let grader;
+  let graders = [];
+  JSON.parse(process.env.GRADERS).forEach((user) => {
     if (user.role === "grader" && user.locale === "hk") {
+      let grader;
       grader = {
         name: user.name,
       };
+      graders.push(grader);
     }
-    return grader;
   });
   res.status(200).set("Content-Security-Policy").render("projectStatus", {
     title: "Project Status",
