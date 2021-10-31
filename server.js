@@ -35,8 +35,8 @@ mongoose
 // define global variable
 User.find({}).then((data) => {
   global.users = data;
+  console.log(global.users);
 });
-global.pe_counts = {};
 
 // start the server
 const port = process.env.PORT; // listen port 3000, random assigned in heroku

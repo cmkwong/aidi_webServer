@@ -10,6 +10,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
   if (user.length === 0) {
     return next(new AppError("No users found.", 404));
   }
+  console.log(global.users);
   res.status(200).json({
     data: user,
   });

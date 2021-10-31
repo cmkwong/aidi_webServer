@@ -66,21 +66,17 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
 });
 exports.getOneQueryId = catchAsync(async (req, res, next) => {
   // expected only one query is found based on this three conditions
-  if (!req.query.project_id || !req.query.locale || !req.query.query_code) {
+  const { project_id, locale, query_code } = req.query;
+  if (!project_id || !locale || !query_code) {
     return next(
       new AppError(
-        `project_id=${!!req.query.project_id}, locale=${!!req.query
-          .locale}, query_code=${!!req.query.query_code}`
+        `project_id=${!!project_id}, locale=${!!req.query
+          .locale}, query_code=${!!query_code}`
       )
     );
   }
   // find the query
-  let query = await factory.findOneQuery(
-    Query,
-    req.query.project_id,
-    req.query.locale,
-    req.query.query_code
-  );
+  let query = await factory.findOneQuery(Query, project_id, locale, query_code);
   if (!query) {
     return next(new AppError("No such query found", 404));
   }

@@ -7,7 +7,7 @@ const router = express.Router({ mergeParams: true }); // what is mergeParams? ht
 
 router
   .route("/status")
-  .post(projectController.updateProjectStatus, projectController.updatePeCount)
+  .post(projectController.updateProjectStatus)
   .get(projectController.getProjectStatus);
 router.route("/list").get(projectController.getProjectList);
 router.route("/ghostList").get(projectController.getProjectGhostList);

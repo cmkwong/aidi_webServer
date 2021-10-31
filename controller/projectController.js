@@ -6,6 +6,14 @@ const AppError = require("../utils/appError");
 
 exports.updateProjectStatus = catchAsync(async (req, res, next) => {
   const { project_id, locale, grader } = req.body;
+  if (!project_id || !locale || !grader) {
+    return next(
+      new AppError(
+        `project_id=${!!project_id}, locale=${!!req.query
+          .locale}, grader=${!!grader}`
+      )
+    );
+  }
   filter = {
     project_id: project_id,
     locale: locale,
@@ -26,7 +34,7 @@ exports.updateProjectStatus = catchAsync(async (req, res, next) => {
   }
 
   // update the document
-  prjStatus.status.set(grader, Date.now()); // https://mongoosejs.com/docs/schematypes.html#maps
+  prjStatus._update = grader;
 
   // update mongoDB
   await prjStatus.save();
@@ -34,21 +42,9 @@ exports.updateProjectStatus = catchAsync(async (req, res, next) => {
   // send successful message
   res.status(200).json({
     status: "success",
+    data: prjStatus,
   });
-  next();
 });
-
-exports.updatePeCount = (req, res, next) => {
-  const { project_id, locale, grader } = req.body;
-  if (!global.pe_counts[project_id]) {
-    global.pe_counts[project_id] = {};
-  }
-  if (global.pe_counts[project_id][grader]) {
-    global.pe_counts[project_id][grader]++;
-  } else {
-    global.pe_counts[project_id][grader] = 1;
-  }
-};
 
 exports.getProjectStatus = catchAsync(async (req, res, next) => {
   const { project_id, locale } = req.query;
@@ -67,16 +63,8 @@ exports.getProjectStatus = catchAsync(async (req, res, next) => {
   for (const grader in projStatusJSON) {
     let graderInfo = {
       name: grader,
-      mins: (Date.now() - projStatusJSON[grader]) / 1000 / 60,
-      count: (() => {
-        if (!global.pe_counts[project_id]) {
-          global.pe_counts[project_id] = {};
-        }
-        if (!global.pe_counts[project_id][grader]) {
-          global.pe_counts[project_id][grader] = 1;
-        }
-        return global.pe_counts[project_id][grader];
-      })(),
+      mins: (Date.now() - projStatusJSON[grader]["time"]) / 1000 / 60,
+      count: projStatusJSON[grader]["count"],
     };
     prjStatus_data.push(graderInfo);
   }

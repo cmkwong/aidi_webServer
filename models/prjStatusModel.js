@@ -16,11 +16,25 @@ const prjStatusSchema = mongoose.Schema(
     },
     status: {
       type: Map,
-      of: Number,
+      of: {
+        time: Number,
+        count: Number,
+      },
     },
+    _update: String,
   },
   { collection: "project_status" }
 );
+
+prjStatusSchema.pre("save", function (next) {
+  const grader = this._update;
+
+  let cur_count = this.status.get(grader)?.count;
+  let new_count = cur_count ? cur_count + 1 : 1;
+  this.status.set(grader, { time: Date.now(), count: new_count }); // https://mongoosejs.com/docs/schematypes.html#maps
+  this._update = undefined;
+  next();
+});
 
 const PrjStatus = mongoose.model("PrjStatus", prjStatusSchema);
 module.exports = PrjStatus;
