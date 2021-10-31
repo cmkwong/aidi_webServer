@@ -34,8 +34,7 @@ mongoose
 
 // define global variable
 User.find({}).then((data) => {
-  global.users = data;
-  console.log(global.users);
+  process.env.GRADERS = JSON.stringify(data);
 });
 
 // start the server

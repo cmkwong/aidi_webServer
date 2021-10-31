@@ -20,7 +20,7 @@ exports.viewProjectStatus = catchAsync(async (req, res, next) => {
     };
     return project_data;
   });
-  const graders = global.users.map((user) => {
+  const graders = JSON.parse(process.env.GRADERS).map((user) => {
     let grader;
     if (user.role === "grader" && user.locale === "hk") {
       grader = {
