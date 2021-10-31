@@ -4,20 +4,20 @@
   "description": "aidi webserver",
   "main": "app.js",
   "dependencies": {
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
-    "compression": "^1.7.4",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "helmet": "^4.4.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.9",
-    "pug": "^3.0.2"
+    "axios": "=0.21.1",
+    "body-parser": "=1.19.0",
+    "compression": "=1.7.4",
+    "cookie-parser": "=1.4.5",
+    "cors": "=2.8.5",
+    "dotenv": "=10.0.0",
+    "express": "=4.17.1",
+    "helmet": "=4.4.1",
+    "jsonwebtoken": "=8.5.1",
+    "mongoose": "=5.10.9",
+    "pug": "=3.0.2"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.5"
+    "parcel-bundler": "=1.12.5"
   },
   "scripts": {
     "start": "node server.js",
@@ -26,7 +26,7 @@
     "build:js": "parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "engines": {
-    "node": "^10"
+    "node": "=14.16.0"
   },
   "author": "Chris Cheung",
   "license": "ISC"
