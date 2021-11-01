@@ -138,6 +138,7 @@ exports.getQuries = catchAsync(async (req, res, next) => {
     req.query.project_id,
     req.query.locale,
     req.query.query_code,
+    req.query.query_text,
     Number(req.query.max ? req.query.max : 50) // default maximum head 50 documents
   );
   if (queries.length === 0) {

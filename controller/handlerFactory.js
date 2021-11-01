@@ -16,12 +16,14 @@ exports.findQueries = async (
   project_id,
   locale,
   query_code,
+  query_text,
   max = 50
 ) => {
   const filter = {
     project_id,
     locale,
     query_code,
+    query_text,
   };
   // delete the undefined fields
   Object.keys(filter).forEach((key) =>
