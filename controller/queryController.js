@@ -65,6 +65,10 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
   });
 });
 exports.getOneQueryId = catchAsync(async (req, res, next) => {
+  if (req.query.query_id) {
+    res.locals.query_id = req.query.query_id;
+    return next();
+  }
   // expected only one query is found based on this three conditions
   const { project_id, locale, query_code } = req.query;
   if (!project_id || !locale || !query_code) {
@@ -80,13 +84,13 @@ exports.getOneQueryId = catchAsync(async (req, res, next) => {
   if (!query) {
     return next(new AppError("No such query found", 404));
   }
-  res.locals.query = query;
+  res.locals.query_id = query._id;
   next();
 });
 
 exports.getManyAnswerByOneQueryId = catchAsync(async (req, res, next) => {
   // base on the query ID, find all of the answer
-  let query_id = res.locals.query._id;
+  let { query_id } = res.locals;
   let answers = await factory.findManyAnswerByOneQueryId(
     Answer,
     query_id,
@@ -104,7 +108,7 @@ exports.getManyAnswerByOneQueryId = catchAsync(async (req, res, next) => {
 
 exports.getOneAnswerByOneQueryId = catchAsync(async (req, res, next) => {
   // base on the query ID, find all of the answer
-  let query_id = res.locals.query._id;
+  let { query_id } = res.locals;
   let answer = await factory.findOneAnswerByOneQueryId(
     Answer,
     query_id,
@@ -139,6 +143,7 @@ exports.getQuries = catchAsync(async (req, res, next) => {
     req.query.locale,
     req.query.query_code,
     req.query.query_text,
+    req.query.query_id,
     Number(req.query.max ? req.query.max : 50) // default maximum head 50 documents
   );
   if (queries.length === 0) {
@@ -146,6 +151,7 @@ exports.getQuries = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: "queries found successfully",
+    doc_count: queries.length,
     data: queries,
   });
 });
