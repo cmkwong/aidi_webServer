@@ -36,8 +36,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use(helmet());
 
 // Body parser, reading data from body into req.body
-app.use(express.json({ limit: "10kb" }));
-app.use(express.urlencoded({ extended: true, limit: "10kb" })); // getting the user data from a form so updateUserData() (in viewsController) can be used, #194 0930
+app.use(express.json({ limit: "50kb" }));
+app.use(express.urlencoded({ extended: true, limit: "50kb" })); // getting the user data from a form so updateUserData() (in viewsController) can be used, #194 0930
 app.use(cookieParser());
 
 app.use(compression()); // compress all the text that send to client
