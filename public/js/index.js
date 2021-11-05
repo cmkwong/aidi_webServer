@@ -122,7 +122,9 @@ if (projectStatusRefresh) {
       const prjStatus = await getPrjStatus(project_id, locale);
       if (prjStatus) {
         prjStatus.forEach((ps) => {
-          let row = document.querySelector(`[data-grader=${ps.name}]`);
+          let row = document.querySelector(
+            `[data-grader=${ps.name.replace(/ /g, "")}]` // for fixed the grader name bug
+          );
           if (row) {
             row.querySelectorAll("p")[0].innerText = ps.mins.toFixed(2);
             row.querySelectorAll("p")[1].innerText = ps.count;

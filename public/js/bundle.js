@@ -9053,7 +9053,8 @@ if (projectStatusRefresh) {
 
               if (prjStatus) {
                 prjStatus.forEach(function (ps) {
-                  var row = document.querySelector("[data-grader=".concat(ps.name, "]"));
+                  var row = document.querySelector("[data-grader=".concat(ps.name.replace(/ /g, ""), "]") // for fixed the grader name bug
+                  );
 
                   if (row) {
                     row.querySelectorAll("p")[0].innerText = ps.mins.toFixed(2);
