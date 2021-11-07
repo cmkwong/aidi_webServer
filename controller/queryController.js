@@ -39,17 +39,15 @@ exports.updateQuery = catchAsync(async (req, res, next) => {
 });
 
 exports.updateAnswer = catchAsync(async (req, res, next) => {
+  const query_id = res.locals.query._id;
+  const grader = req.body.grader.replace(/ /g, "");
   // if not existed, create new document and update
-  let answer = await factory.findGraderAnswer(
-    Answer,
-    res.locals.query._id,
-    req.body.grader
-  );
+  let answer = await factory.findGraderAnswer(Answer, query_id, grader);
   if (!answer) {
     answer = new Answer();
-    answer.grader = req.body.grader;
+    answer.grader = grader;
     answer.grader_ans = req.body.grader_ans;
-    answer.query_id = res.locals.query._id;
+    answer.query_id = query_id;
     answer.time = Date.now();
   } else {
     // if answer existed, modified the answer and update the date
@@ -64,6 +62,7 @@ exports.updateAnswer = catchAsync(async (req, res, next) => {
     data: answer,
   });
 });
+
 exports.getOneQueryId = catchAsync(async (req, res, next) => {
   if (req.query.query_id) {
     res.locals.query_id = req.query.query_id;
