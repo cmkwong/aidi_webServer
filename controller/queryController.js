@@ -14,7 +14,9 @@ exports.answerInsertAllowed = (req, res, next) => {
 };
 
 exports.updateQuery = catchAsync(async (req, res, next) => {
-  console.log(req.body.grader);
+  console.log(
+    `${req.body.grader}: ${req.body.query_text}, ${req.body.project_id}`
+  );
   // if not existed, create new document and update
   let query = await factory.findOneQuery(
     // always return list
