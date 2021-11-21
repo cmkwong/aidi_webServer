@@ -1,6 +1,7 @@
 const Project = require("../models/projectModel");
 const GhostProjects = require("../models/ghostProjectModel");
 const PrjStatus = require("../models/prjStatusModel");
+const PrjList = require("../models/prjListModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
@@ -77,6 +78,14 @@ exports.getProjectList = catchAsync(async (req, res, next) => {
   let projects = await Project.find({});
   res.status(200).json({
     data: projects,
+  });
+});
+
+exports.updateProjectList = catchAsync(async (req, res, next) => {
+  await PrjList.deleteMany({});
+  await PrjList.insertMany(req.body.list);
+  res.status(200).json({
+    status: "success",
   });
 });
 

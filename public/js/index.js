@@ -1,4 +1,5 @@
 import "@babel/polyfill";
+import { bootstrap } from "./bootstrap";
 import { updateTime } from "./script";
 import { login, logout } from "./login";
 import { getPrjStatus, initPrjStatus } from "./prjStatus";
