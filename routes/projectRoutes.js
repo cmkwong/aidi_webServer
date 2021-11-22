@@ -9,6 +9,9 @@ router
   .route("/status")
   .post(projectController.updateProjectStatus)
   .get(projectController.getProjectStatus);
-router.route("/list").get(projectController.getProjectList);
+router
+  .route("/list")
+  .get(projectController.getProjectList)
+  .post(projectController.updateProjectList);
 router.route("/ghostList").get(projectController.getProjectGhostList);
 module.exports = router;
