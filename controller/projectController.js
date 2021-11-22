@@ -83,7 +83,7 @@ exports.getProjectList = catchAsync(async (req, res, next) => {
 
 exports.updateProjectList = catchAsync(async (req, res, next) => {
   await PrjList.deleteMany({});
-  await PrjList.insertMany(req.body.list);
+  await PrjList.insertMany(req.body.projects);
   res.status(200).json({
     status: "success",
   });
